@@ -26,7 +26,7 @@ public class SaleController {
     }
 
     @GetMapping("/{id}")
-    public Sale getSaleById(@PathVariable int id) {
+    public Sale getSaleById(@PathVariable("id") int id) {
         return saleService.getSaleById(id);
     }
 

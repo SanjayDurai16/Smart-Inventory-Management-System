@@ -6,6 +6,7 @@ import com.inventory.api.model.Product;
 import com.inventory.api.repository.CategoryRepository;
 import com.inventory.api.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -51,8 +52,10 @@ public class ProductService {
         return getProductById(id);
     }
 
+    @Transactional
     public void deleteProduct(int id) {
         getProductById(id);
+        productRepository.deleteSaleItemsByProductId(id);
         productRepository.deleteById(id);
     }
 

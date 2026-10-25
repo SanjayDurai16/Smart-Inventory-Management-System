@@ -137,6 +137,17 @@ public class ProductRepository {
         return jdbcTemplate.update(sql, id);
     }
 
+    public int countSaleItemsByProductId(int productId) {
+        String sql = "SELECT COUNT(*) FROM sale_items WHERE product_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, productId);
+        return count != null ? count : 0;
+    }
+
+    public int deleteSaleItemsByProductId(int productId) {
+        String sql = "DELETE FROM sale_items WHERE product_id = ?";
+        return jdbcTemplate.update(sql, productId);
+    }
+
     public int countAll() {
         String sql = "SELECT COUNT(*) FROM products";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
