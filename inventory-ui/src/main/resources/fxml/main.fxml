@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.inventory.ui.controller.MainController"
+            prefHeight="720.0" prefWidth="1080.0">
+
+    <!-- Left Sidebar Navigation -->
+    <left>
+        <VBox styleClass="sidebar" spacing="6">
+            <Label text="Smart Inventory" styleClass="sidebar-title"/>
+            <Button fx:id="navDashboardBtn" text="📊  Dashboard" onAction="#showDashboardView" styleClass="nav-button"/>
+            <Button fx:id="navProductsBtn" text="📦  Products" onAction="#showProductsView" styleClass="nav-button"/>
+            <Button fx:id="navCategoriesBtn" text="📁  Categories" onAction="#showCategoriesView" styleClass="nav-button"/>
+            <Button fx:id="navSalesBtn" text="💰  Sales" onAction="#showSalesView" styleClass="nav-button"/>
+            <Button fx:id="navLowStockBtn" text="⚠️  Low Stock" onAction="#showLowStockView" styleClass="nav-button"/>
+            <VBox VBox.vgrow="ALWAYS"/>
+            <Label text="Status: Online" style="-fx-text-fill: #10b981; -fx-font-size: 11px; -fx-padding: 0 0 10 10;"/>
+        </VBox>
+    </left>
+
+    <!-- Center Content Stack -->
+    <center>
+        <StackPane fx:id="contentPane" styleClass="content-area">
+
+            <!-- 1. Dashboard View -->
+            <VBox fx:id="dashboardView" spacing="20">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Dashboard" styleClass="page-title"/>
+                        <Label text="Real-time inventory overview and metrics" styleClass="page-subtitle"/>
+                    </VBox>
+                    <Button text="🔄 Refresh" onAction="#loadDashboardData" styleClass="btn-secondary"/>
+                </HBox>
+
+                <!-- Stat Cards -->
+                <HBox spacing="16">
+                    <VBox styleClass="stat-card">
+                        <Label text="Total Products" styleClass="stat-title"/>
+                        <Label fx:id="cardTotalProducts" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card">
+                        <Label text="Total Categories" styleClass="stat-title"/>
+                        <Label fx:id="cardTotalCategories" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card">
+                        <Label text="Completed Sales" styleClass="stat-title"/>
+                        <Label fx:id="cardTotalSales" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card">
+                        <Label text="Total Revenue" styleClass="stat-title"/>
+                        <Label fx:id="cardTotalRevenue" text="\$0.00" styleClass="stat-value-success"/>
+                    </VBox>
+                    <VBox styleClass="stat-card">
+                        <Label text="Low Stock Items" styleClass="stat-title"/>
+                        <Label fx:id="cardLowStock" text="0" styleClass="stat-value-warning"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <Label text="Critical Low-Stock Alerts" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1e293b;"/>
+                    <TableView fx:id="dashboardLowStockTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="dashColId" text="ID" prefWidth="60"/>
+                            <TableColumn fx:id="dashColName" text="Product Name" prefWidth="250"/>
+                            <TableColumn fx:id="dashColSku" text="SKU" prefWidth="140"/>
+                            <TableColumn fx:id="dashColCategory" text="Category" prefWidth="140"/>
+                            <TableColumn fx:id="dashColPrice" text="Price ($)" prefWidth="100"/>
+                            <TableColumn fx:id="dashColQuantity" text="Quantity" prefWidth="100"/>
+                            <TableColumn fx:id="dashColThreshold" text="Threshold" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <!-- 2. Products View -->
+            <VBox fx:id="productsView" spacing="16" visible="false">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Products Management" styleClass="page-title"/>
+                        <Label text="Add, view, edit, or delete inventory products" styleClass="page-subtitle"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="➕ Add Product" onAction="#handleAddProduct" styleClass="btn-primary"/>
+                        <Button text="✏️ Edit Selected" onAction="#handleEditProduct" styleClass="btn-secondary"/>
+                        <Button text="🗑️ Delete Selected" onAction="#handleDeleteProduct" styleClass="btn-danger"/>
+                        <Button text="🔄 Refresh" onAction="#loadProductsData" styleClass="btn-secondary"/>
+                    </HBox>
+                </HBox>
+
+                <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="prodColId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="prodColName" text="Product Name" prefWidth="240"/>
+                        <TableColumn fx:id="prodColSku" text="SKU" prefWidth="140"/>
+                        <TableColumn fx:id="prodColCategory" text="Category" prefWidth="140"/>
+                        <TableColumn fx:id="prodColPrice" text="Price ($)" prefWidth="100"/>
+                        <TableColumn fx:id="prodColQuantity" text="Quantity" prefWidth="100"/>
+                        <TableColumn fx:id="prodColThreshold" text="Threshold" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- 3. Categories View -->
+            <VBox fx:id="categoriesView" spacing="16" visible="false">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Category Management" styleClass="page-title"/>
+                        <Label text="Organize your products into logical categories" styleClass="page-subtitle"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="➕ Add Category" onAction="#handleAddCategory" styleClass="btn-primary"/>
+                        <Button text="✏️ Edit Selected" onAction="#handleEditCategory" styleClass="btn-secondary"/>
+                        <Button text="🗑️ Delete Selected" onAction="#handleDeleteCategory" styleClass="btn-danger"/>
+                        <Button text="🔄 Refresh" onAction="#loadCategoriesData" styleClass="btn-secondary"/>
+                    </HBox>
+                </HBox>
+
+                <TableView fx:id="categoriesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="catColId" text="ID" prefWidth="70"/>
+                        <TableColumn fx:id="catColName" text="Category Name" prefWidth="250"/>
+                        <TableColumn fx:id="catColDescription" text="Description" prefWidth="480"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- 4. Sales View -->
+            <VBox fx:id="salesView" spacing="16" visible="false">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Sales &amp; Stock Deduction" styleClass="page-title"/>
+                        <Label text="Process customer sales and view past transactions" styleClass="page-subtitle"/>
+                    </VBox>
+                    <Button text="🔄 Refresh" onAction="#loadSalesData" styleClass="btn-secondary"/>
+                </HBox>
+
+                <!-- New Sale Section -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #e2e8f0; -fx-border-radius: 8;">
+                    <Label text="New Sale Transaction" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1e293b;"/>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="Select Product:"/>
+                        <ComboBox fx:id="saleProductCombo" prefWidth="300" promptText="Choose a product..."/>
+                        <Label text="Quantity:"/>
+                        <TextField fx:id="saleQtyInput" prefWidth="80" text="1"/>
+                        <Button text="➕ Add Item" onAction="#handleAddItemToSale" styleClass="btn-secondary"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="cartTotalLabel" text="Grand Total: $0.00" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #16a34a;"/>
+                        <Button text="🛒 Complete Sale" onAction="#handleCompleteSale" styleClass="btn-success"/>
+                        <Button text="❌ Clear" onAction="#handleClearSaleCart" styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <!-- Cart Table -->
+                    <TableView fx:id="saleCartTable" prefHeight="130">
+                        <columns>
+                            <TableColumn fx:id="cartColProduct" text="Product" prefWidth="260"/>
+                            <TableColumn fx:id="cartColPrice" text="Unit Price ($)" prefWidth="120"/>
+                            <TableColumn fx:id="cartColQty" text="Quantity" prefWidth="100"/>
+                            <TableColumn fx:id="cartColSubtotal" text="Subtotal ($)" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+                <!-- Past Sales List -->
+                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                    <Label text="Sales History" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1e293b;"/>
+                    <TableView fx:id="salesHistoryTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="saleColId" text="ID" prefWidth="60"/>
+                            <TableColumn fx:id="saleColNumber" text="Sale Number" prefWidth="220"/>
+                            <TableColumn fx:id="saleColTotal" text="Total Amount ($)" prefWidth="150"/>
+                            <TableColumn fx:id="saleColDate" text="Date / Time" prefWidth="240"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <!-- 5. Low Stock View -->
+            <VBox fx:id="lowStockView" spacing="16" visible="false">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Low Stock Alerts" styleClass="page-title"/>
+                        <Label text="Items with inventory at or below threshold" styleClass="page-subtitle"/>
+                    </VBox>
+                    <HBox spacing="10">
+                        <Button text="📦 Restock Selected" onAction="#handleRestockProduct" styleClass="btn-primary"/>
+                        <Button text="🔄 Refresh" onAction="#loadLowStockData" styleClass="btn-secondary"/>
+                    </HBox>
+                </HBox>
+
+                <TableView fx:id="lowStockTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="lowColId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="lowColName" text="Product Name" prefWidth="240"/>
+                        <TableColumn fx:id="lowColSku" text="SKU" prefWidth="140"/>
+                        <TableColumn fx:id="lowColCategory" text="Category" prefWidth="140"/>
+                        <TableColumn fx:id="lowColPrice" text="Price ($)" prefWidth="100"/>
+                        <TableColumn fx:id="lowColQuantity" text="Current Stock" prefWidth="110"/>
+                        <TableColumn fx:id="lowColThreshold" text="Threshold" prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </StackPane>
+    </center>
+</BorderPane>
