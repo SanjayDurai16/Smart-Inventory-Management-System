@@ -179,7 +179,12 @@ Tests verify:
 
 ## 👤 Author
 
-- **Sanjay Durai** — [GitHub Profile](https://github.com/SanjayDurai16)
+- **Sanjay Durai -[GitHub Profile](https://github.com/SanjayDurai16)
+-  Sujith S  - [Github Profile](https://github.com/Sujith-S05)
+-  Barani Sankar - 
+-  Sanjai S
+-  Srijan S
+- ** 
 
 ## 📄 License
 
