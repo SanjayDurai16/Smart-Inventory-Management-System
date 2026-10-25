@@ -181,9 +181,9 @@ Tests verify:
 
 - **Sanjay Durai -[GitHub Profile](https://github.com/SanjayDurai16)
 -  Sujith S  - [Github Profile](https://github.com/Sujith-S05)
--  Barani Sankar - 
--  Sanjai S
--  Srijan S
+-  Barani Sankar - [Github Profile](https://github.com/SanjaiSrinivasan07)
+-  Sanjai S - [Github Profile](https://github.com/SanjaiSrinivasan07)
+-  Srijan S - [Github Profile](https://github.com/SanjaiSrinivasan07)
 - ** 
 
 ## 📄 License
